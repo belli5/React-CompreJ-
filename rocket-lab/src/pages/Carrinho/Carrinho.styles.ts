@@ -19,6 +19,7 @@ export const Item = styled.div`
   margin-bottom: 16px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 `;
@@ -62,6 +63,12 @@ export const Button = styled.button<{ variant?: 'comprar' | 'remover' }>`
   &:hover {
     background-color: ${({ variant }) =>
       variant === 'remover' ? '#ff0000' : '#0041a8'};
-    color: ${({ variant }) => (variant === 'remover' ? 'white' : 'white')};
+    color: white;
   }
+`;
+
+export const QuantidadeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;

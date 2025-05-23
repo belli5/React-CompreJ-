@@ -1,0 +1,129 @@
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { QRCodeCanvas } from 'qrcode.react';
+import {
+  Container,
+  ProdutoContainer,
+  ProdutoImagem,
+  ProdutoInfo,
+  Titulo,
+  FormularioContainer,
+  Form,
+  Input,
+  Textarea,
+  Label,
+  Button,
+  Select,
+  QrCodeContainer,
+} from './FinalizarCompra.styles';
+
+function FinalizarCompra() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const produto = location.state?.produto;
+
+  const [formaPagamento, setFormaPagamento] = useState('');
+  const [chavePix, setChavePix] = useState('meuemail@exemplo.com');
+
+  useEffect(() => {
+    if (!produto) {
+      navigate('/');
+    }
+  }, [produto, navigate]);
+
+  if (!produto) {
+    return null;
+  }
+
+  const renderCamposPagamento = () => {
+    switch (formaPagamento) {
+      case 'cartao':
+        return (
+          <>
+            <Label>Nome no Cartão</Label>
+            <Input type="text" placeholder="Nome impresso no cartão" />
+
+            <Label>Número do Cartão</Label>
+            <Input type="text" placeholder="XXXX XXXX XXXX XXXX" />
+
+            <Label>Validade</Label>
+            <Input type="text" placeholder="MM/AA" />
+
+            <Label>CVV</Label>
+            <Input type="text" placeholder="CVV" />
+          </>
+        );
+      case 'pix':
+        return (
+          <>
+            <Label>Chave Pix</Label>
+            <Input
+              type="text"
+              value={chavePix}
+              onChange={(e) => setChavePix(e.target.value)}
+              placeholder="Digite sua chave Pix"
+            />
+
+            <Label>QR Code para Pagamento</Label>
+            <QrCodeContainer>
+              <QRCodeCanvas value={chavePix} size={180} />
+            </QrCodeContainer>
+          </>
+        );
+      case 'boleto':
+        return (
+          <>
+            <p>O boleto será gerado após finalizar a compra.</p>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Container>
+      <ProdutoContainer>
+        <Titulo>Resumo do Pedido</Titulo>
+        <ProdutoImagem src={produto.imagem} alt={produto.nome} />
+        <ProdutoInfo>
+          <h3>{produto.nome}</h3>
+          <p>{produto.descricao}</p>
+          <strong>{produto.preco}</strong>
+        </ProdutoInfo>
+      </ProdutoContainer>
+
+      <FormularioContainer>
+        <Titulo>Finalizar Compra</Titulo>
+        <Form>
+          <Label>Nome Completo</Label>
+          <Input type="text" placeholder="Digite seu nome completo" />
+
+          <Label>Endereço</Label>
+          <Input type="text" placeholder="Rua, Número, Bairro, Cidade" />
+
+          <Label>Forma de Pagamento</Label>
+          <Select
+            value={formaPagamento}
+            onChange={(e) => setFormaPagamento(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="pix">Pix</option>
+            <option value="cartao">Cartão de Crédito/Débito</option>
+            <option value="boleto">Boleto</option>
+          </Select>
+
+          {renderCamposPagamento()}
+
+          <Label>Informações Adicionais</Label>
+          <Textarea placeholder="Ex.: Portão, andar, referência..." />
+
+          <Button type="submit">Finalizar Pedido</Button>
+        </Form>
+      </FormularioContainer>
+    </Container>
+  );
+}
+
+export default FinalizarCompra;

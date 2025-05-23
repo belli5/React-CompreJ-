@@ -37,4 +37,9 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
   }
+
+  body {
+  padding-top: 80px; 
+}
+
 `;

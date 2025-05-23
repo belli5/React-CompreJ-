@@ -1,9 +1,10 @@
 import { useCarrinho } from '../../pages/Carrinho/CarrinhoContext';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+
 import {
   HeaderContainer,
-  Container,
+  Content,
   Logo,
   Menu,
   MenuItem,
@@ -16,8 +17,9 @@ function Header() {
 
   return (
     <HeaderContainer>
-      <Container>
+      <Content>
         <Logo>CompreJá</Logo>
+
         <nav>
           <Menu>
             <MenuItem>
@@ -32,14 +34,14 @@ function Header() {
             <MenuItem>
               <Link to="/carrinho">
                 <CarrinhoIcon>
-                  <FaShoppingCart size={22} />
+                  <FaShoppingCart />
                   {itens.length > 0 && <Contador>{itens.length}</Contador>}
                 </CarrinhoIcon>
               </Link>
             </MenuItem>
           </Menu>
         </nav>
-      </Container>
+      </Content>
     </HeaderContainer>
   );
 }

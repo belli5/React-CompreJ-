@@ -1,15 +1,18 @@
-import styled from 'styled-components';
+import { styled } from "styled-components";
 
 export const HeaderContainer = styled.header`
-  background-color: #0057d9;
-  padding: 16px 0;
+  width: 100%;
+  background-color: #0057D9;
   color: white;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
 `;
 
-export const Container = styled.div`
+export const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,36 +21,31 @@ export const Container = styled.div`
 export const Logo = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
-  margin-left: -60px; 
+  cursor: pointer;
 `;
 
 export const Menu = styled.ul`
   display: flex;
-  gap: 24px;
   list-style: none;
+  gap: 24px;
 `;
 
 export const MenuItem = styled.li`
   a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s, transform 0.2s;
+    transition: color 0.3s ease;
 
     &:hover {
-      color: #d1e7ff;
-      transform: translateY(-2px);
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+      color: #a7d5ff;
     }
   }
 `;
 
 export const CarrinhoIcon = styled.div`
   position: relative;
-  color: white;
+  font-size: 24px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 `;
 
 export const Contador = styled.span`
@@ -56,8 +54,8 @@ export const Contador = styled.span`
   right: -10px;
   background-color: red;
   color: white;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
-  padding: 2px 6px;
   border-radius: 50%;
+  padding: 2px 6px;
 `;
