@@ -1,61 +1,87 @@
-import { styled } from "styled-components";
+import styled from 'styled-components';
 
 export const HeaderContainer = styled.header`
-  width: 100%;
-  background-color: #0057D9;
+  background-color: #0057d9;
+  padding: 10px 0;
   color: white;
   position: fixed;
+  width: 100%;
   top: 0;
   z-index: 1000;
+  height: 110px;
 `;
 
-export const Content = styled.div`
+export const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 `;
 
-export const Logo = styled.h1`
-  font-size: 1.8rem;
-  font-weight: bold;
-  cursor: pointer;
+export const Logo = styled.div`
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin-left: -100px;
+
+  img {
+    height: 120px;
+    margin-right: 10px;
+  }
 `;
 
 export const Menu = styled.ul`
   display: flex;
-  list-style: none;
   gap: 24px;
+  align-items: center;
 `;
 
 export const MenuItem = styled.li`
   a {
     color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    font-size: 28px;
+    transition: color 0.3s;
 
     &:hover {
-      color: #a7d5ff;
+      color: #b3d1ff;
     }
   }
 `;
 
 export const CarrinhoIcon = styled.div`
   position: relative;
-  font-size: 24px;
+  font-size: 2.0rem;
   cursor: pointer;
+  color: #f5c518;
 `;
 
 export const Contador = styled.span`
   position: absolute;
   top: -8px;
   right: -10px;
-  background-color: red;
+  background-color: #ff0000;
   color: white;
-  font-size: 12px;
-  font-weight: bold;
   border-radius: 50%;
   padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+`;
+
+export const SearchContainer = styled.div`
+  margin: 0 20px;
+  flex-grow: 2;       
+  min-width: 300px;  
+  max-width: 600px;  
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  outline: none;
 `;

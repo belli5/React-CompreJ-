@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../Carrinho/CarrinhoContext';
 import {
   Main,
@@ -10,7 +11,8 @@ import {
   ProductName,
   Description,
   Price,
-  Button,
+  AddButton,
+  BuyButton,
   LeftArrow,
   RightArrow,
   CarouselContainer
@@ -39,7 +41,7 @@ const categorias: Categoria[] = [
       { id: 2, nome: 'Smartwatch', descricao: 'Monitoramento de saúde.', preco: 'R$ 349,90', imagem: '/Imagens/relogio-igpsport-lw10-smart-watch-gps-com-monitor-cardiaco-65b4182547e38.png' },
       { id: 3, nome: 'Fone Bluetooth', descricao: 'Cancelamento de ruído.', preco: 'R$ 199,90', imagem: '/Imagens/17152652190881.webp' },
       { id: 4, nome: 'Câmera DSLR', descricao: 'Alta definição para fotos.', preco: 'R$ 2.499,90', imagem: '/Imagens/01_EOS_T7_NOVAFOTO.jpg' },
-      { id: 4, nome: 'Caixa de som', descricao: 'Som de alta qualidade.', preco: 'R$ 1.099,90', imagem: '/Imagens/caixa_de_som_portatil_jbl_boombox_3_wi_fi_bluetooth_preto_jblbb3wifiblkbr_4902_1_44ec36274e24e5e892fc573dc2ff3596.webp' },
+      { id: 5, nome: 'Caixa de som', descricao: 'Som de alta qualidade.', preco: 'R$ 1.099,90', imagem: '/Imagens/caixa_de_som_portatil_jbl_boombox_3_wi_fi_bluetooth_preto_jblbb3wifiblkbr_4902_1_44ec36274e24e5e892fc573dc2ff3596.webp' },
     ],
   },
 
@@ -70,6 +72,7 @@ const categorias: Categoria[] = [
 
 function Home() {
   const { adicionarItem } = useCarrinho();
+  const navigate = useNavigate();
 
   return (
     <Main>
@@ -81,7 +84,7 @@ function Home() {
             const scrollAmount = 340;
             carouselRef.current.scrollBy({
               left: direction === 'left' ? -scrollAmount : scrollAmount,
-              behavior: 'smooth'
+              behavior: 'smooth',
             });
           }
         };
@@ -98,9 +101,10 @@ function Home() {
                     <ProductName>{produto.nome}</ProductName>
                     <Description>{produto.descricao}</Description>
                     <Price>{produto.preco}</Price>
-                    <Button onClick={() => adicionarItem(produto)}>
+                    <AddButton onClick={() => adicionarItem(produto)}>
                       Adicionar ao Carrinho
-                    </Button>
+                    </AddButton>
+                    <BuyButton onClick={() => navigate('/finalizar', { state: { produto } })}>Comprar</BuyButton>
                   </Card>
                 ))}
               </Carousel>

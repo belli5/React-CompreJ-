@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const CarrinhoContainer = styled.div`
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 40px auto 100px; /* espaço extra abaixo para o botão fixo */
   padding: 20px;
 `;
 
@@ -71,4 +71,31 @@ export const QuantidadeContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+
+export const FinalizarCompraContainer = styled.div`
+  bottom: 60px; /* posiciona logo acima do rodapé */
+  left: 0;
+  width: 100%;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+  z-index: 101; /* acima do rodapé */
+`;
+
+
+export const FinalizarCompraButton = styled.button`
+  background-color: #0057d9;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #0041a8;
+  }
 `;

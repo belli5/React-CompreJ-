@@ -1,25 +1,42 @@
+import React, { useState } from 'react';
 import { useCarrinho } from '../../pages/Carrinho/CarrinhoContext';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
-
 import {
   HeaderContainer,
-  Content,
+  Container,
   Logo,
   Menu,
   MenuItem,
   CarrinhoIcon,
   Contador,
+  SearchContainer,
+  SearchInput,
 } from './Header.styles';
 
 function Header() {
   const { itens } = useCarrinho();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+   
+  };
 
   return (
     <HeaderContainer>
-      <Content>
-        <Logo>CompreJá</Logo>
-
+      <Container>
+        <Logo>
+          <img src="/Imagens/75c11c6c-7691-4454-bb3f-3ecac5bafa22.png" alt="Logo CompreJá" />
+        </Logo>
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Pesquisar produtos..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </SearchContainer>
         <nav>
           <Menu>
             <MenuItem>
@@ -35,13 +52,13 @@ function Header() {
               <Link to="/carrinho">
                 <CarrinhoIcon>
                   <FaShoppingCart />
-                  {itens.length > 0 && <Contador>{itens.length}</Contador>}
+                    {itens.length > 0 && <Contador>{itens.length}</Contador>}
                 </CarrinhoIcon>
               </Link>
             </MenuItem>
           </Menu>
         </nav>
-      </Content>
+      </Container>
     </HeaderContainer>
   );
 }

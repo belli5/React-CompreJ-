@@ -10,7 +10,9 @@ import {
   Preco,
   Buttons,
   Button,
-  QuantidadeContainer
+  QuantidadeContainer,
+  FinalizarCompraContainer,
+  FinalizarCompraButton,
 } from './Carrinho.styles';
 
 function Carrinho() {
@@ -21,6 +23,10 @@ function Carrinho() {
     diminuirQuantidade,
   } = useCarrinho();
   const navigate = useNavigate();
+
+  const finalizarCompraGeral = () => {
+    navigate('/finalizar', { state: { produtos: itens } });
+  };
 
   return (
     <CarrinhoContainer>
@@ -55,6 +61,14 @@ function Carrinho() {
             </QuantidadeContainer>
           </Item>
         ))
+      )}
+
+      {itens.length > 0 && (
+        <FinalizarCompraContainer>
+          <FinalizarCompraButton onClick={finalizarCompraGeral}>
+            Finalizar Compra
+          </FinalizarCompraButton>
+        </FinalizarCompraContainer>
       )}
     </CarrinhoContainer>
   );

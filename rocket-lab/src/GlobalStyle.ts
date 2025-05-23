@@ -11,6 +11,12 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body, #root {
+    height: 100%;
+    overflow-x: hidden;   
+    overflow-y: auto; 
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -22,6 +28,8 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+    padding-top: 80px;
   }
 
   a {
@@ -37,9 +45,4 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
   }
-
-  body {
-  padding-top: 80px; 
-}
-
 `;

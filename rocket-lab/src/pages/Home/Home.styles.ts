@@ -79,11 +79,27 @@ export const Price = styled.div`
   margin-bottom: 12px;
 `;
 
-export const Button = styled.button`
+export const AddButton = styled.button`
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
-  background-color: #0057d9;
+  background-color: #f5c518; /* amarelo */
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e6b800;
+  }
+`;
+
+export const BuyButton = styled.button`
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #0057d9; /* azul */
   color: white;
   cursor: pointer;
   font-weight: 600;
