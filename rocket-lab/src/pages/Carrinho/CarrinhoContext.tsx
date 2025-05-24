@@ -1,81 +1,84 @@
-import { createContext, type ReactNode, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-type Produto = {
+export type ProdutoCarrinho = {
   id: number;
   nome: string;
-  descricao: string;
-  preco: string;
-  imagem: string;
+  descricao?: string;
+  preco: string; // formato "R$ 249,90"
+  quantidade: number;
+  imagem?: string;
 };
-
-type ProdutoCarrinho = Produto & { quantidade: number };
 
 type CarrinhoContextType = {
   itens: ProdutoCarrinho[];
-  adicionarItem: (produto: Produto) => void;
+  adicionarItem: (item: ProdutoCarrinho) => void;
   removerItem: (id: number) => void;
   aumentarQuantidade: (id: number) => void;
   diminuirQuantidade: (id: number) => void;
+  limparCarrinho: () => void;
 };
 
-const CarrinhoContext = createContext({} as CarrinhoContextType);
+const CarrinhoContext = createContext<CarrinhoContextType>({} as CarrinhoContextType);
 
-export function CarrinhoProvider({ children }: { children: ReactNode }) {
+export const CarrinhoProvider = ({ children }: { children: React.ReactNode }) => {
   const [itens, setItens] = useState<ProdutoCarrinho[]>([]);
 
-  function adicionarItem(produto: Produto) {
-    setItens((prev) => {
-      const existente = prev.find((item) => item.id === produto.id);
-      if (existente) {
-        return prev.map((item) =>
-          item.id === produto.id
-            ? { ...item, quantidade: item.quantidade + 1 }
-            : item
-        );
+  // ✅ Carregar carrinho do localStorage ao iniciar
+  useEffect(() => {
+    const carrinhoSalvo = localStorage.getItem('carrinho');
+    if (carrinhoSalvo) {
+      setItens(JSON.parse(carrinhoSalvo));
+    }
+  }, []);
+
+  // ✅ Salvar carrinho no localStorage sempre que itens mudam
+  useEffect(() => {
+    localStorage.setItem('carrinho', JSON.stringify(itens));
+  }, [itens]);
+
+  const adicionarItem = (item: ProdutoCarrinho) => {
+    const existente = itens.find((i) => i.id === item.id);
+
+    if (existente) {
+      setItens(itens.map((i) =>
+        i.id === item.id ? { ...i, quantidade: i.quantidade + 1 } : i
+      ));
+    } else {
+      setItens([...itens, { ...item, quantidade: 1 }]);
+    }
+  };
+
+  const removerItem = (id: number) => {
+    setItens(itens.filter((item) => item.id !== id));
+  };
+
+  const aumentarQuantidade = (id: number) => {
+    setItens(itens.map((item) =>
+      item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item
+    ));
+  };
+
+  const diminuirQuantidade = (id: number) => {
+    setItens(itens.map((item) => {
+      if (item.id === id) {
+        return { ...item, quantidade: item.quantidade > 1 ? item.quantidade - 1 : 1 };
       }
-      return [...prev, { ...produto, quantidade: 1 }];
-    });
-  }
+      return item;
+    }));
+  };
 
-  function removerItem(id: number) {
-    setItens((prev) => prev.filter((item) => item.id !== id));
-  }
-
-  function aumentarQuantidade(id: number) {
-    setItens((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item
-      )
-    );
-  }
-
-  function diminuirQuantidade(id: number) {
-    setItens((prev) =>
-      prev
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantidade: item.quantidade - 1 }
-            : item
-        )
-        .filter((item) => item.quantidade > 0)
-    );
-  }
+  const limparCarrinho = () => {
+    setItens([]);
+    localStorage.removeItem('carrinho');
+  };
 
   return (
     <CarrinhoContext.Provider
-      value={{
-        itens,
-        adicionarItem,
-        removerItem,
-        aumentarQuantidade,
-        diminuirQuantidade,
-      }}
+      value={{ itens, adicionarItem, removerItem, aumentarQuantidade, diminuirQuantidade, limparCarrinho }}
     >
       {children}
     </CarrinhoContext.Provider>
   );
-}
+};
 
-export function useCarrinho() {
-  return useContext(CarrinhoContext);
-}
+export const useCarrinho = () => useContext(CarrinhoContext);

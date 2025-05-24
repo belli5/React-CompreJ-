@@ -58,6 +58,17 @@ export const CarrinhoIcon = styled.div`
   color: #f5c518;
 `;
 
+export const PerfilIcon = styled.div`
+  font-size: 2.0rem;
+  cursor: pointer;
+  color: white;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #b3d1ff;
+  }
+`;
+
 export const Contador = styled.span`
   position: absolute;
   top: -8px;
@@ -72,9 +83,9 @@ export const Contador = styled.span`
 
 export const SearchContainer = styled.div`
   margin: 0 20px;
-  flex-grow: 2;       
-  min-width: 300px;  
-  max-width: 600px;  
+  flex-grow: 2;
+  min-width: 300px;
+  max-width: 600px;
 `;
 
 export const SearchInput = styled.input`

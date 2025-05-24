@@ -5,6 +5,7 @@ import Carrinho from './pages/Carrinho/Carrinho';
 import Footer from './components/Rodape/Rodape';
 import FinalizarCompra from './pages/FinalizarCompra/FinalizarCompra';
 import { GlobalStyle } from './GlobalStyle';
+import Pedidos from './pages/HistoricoPedidos/Pedidos';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/sobre" element={<div>Sobre</div>} />
         <Route path="/contato" element={<div>Contato</div>} />
         <Route path="/finalizar" element={<FinalizarCompra />} />
+        <Route path="/pedidos" element={<Pedidos />} />
+
       </Routes>
       <Footer />
     </Router>

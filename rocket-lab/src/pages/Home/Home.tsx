@@ -15,7 +15,7 @@ import {
   BuyButton,
   LeftArrow,
   RightArrow,
-  CarouselContainer
+  CarouselContainer,
 } from './Home.styles';
 
 type Produto = {
@@ -44,7 +44,6 @@ const categorias: Categoria[] = [
       { id: 5, nome: 'Caixa de som', descricao: 'Som de alta qualidade.', preco: 'R$ 1.099,90', imagem: '/Imagens/caixa_de_som_portatil_jbl_boombox_3_wi_fi_bluetooth_preto_jblbb3wifiblkbr_4902_1_44ec36274e24e5e892fc573dc2ff3596.webp' },
     ],
   },
-
   {
     id: 2,
     nome: 'Produtos de Beleza',
@@ -56,7 +55,6 @@ const categorias: Categoria[] = [
       { id: 10, nome: 'Aparelho de Barbeador', descricao: 'Perfeito para cortes precisos.', preco: 'R$ 149,90', imagem: '/Imagens/688372-800-auto.webp' },
     ],
   },
-
   {
     id: 3,
     nome: 'Casa e Cozinha',
@@ -101,10 +99,16 @@ function Home() {
                     <ProductName>{produto.nome}</ProductName>
                     <Description>{produto.descricao}</Description>
                     <Price>{produto.preco}</Price>
-                    <AddButton onClick={() => adicionarItem(produto)}>
+
+                    <AddButton onClick={() => adicionarItem({ ...produto, quantidade: 1 })}>
                       Adicionar ao Carrinho
                     </AddButton>
-                    <BuyButton onClick={() => navigate('/finalizar', { state: { produto } })}>Comprar</BuyButton>
+
+                    <BuyButton
+                      onClick={() => navigate('/finalizar', { state: { produto: { ...produto, quantidade: 1 } } })}
+                    >
+                      Comprar
+                    </BuyButton>
                   </Card>
                 ))}
               </Carousel>

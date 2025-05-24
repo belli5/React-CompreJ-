@@ -15,7 +15,8 @@ import {
   FinalizarCompraButton,
 } from './Carrinho.styles';
 
-import { ModalFinalizarCompra } from '../../components/Modal/Modal'; // ajuste o caminho conforme sua estrutura
+import { ModalFinalizarCompra } from '../../components/Modal/Modal'; // ajuste conforme seu projeto
+import { useNavigate } from 'react-router-dom';
 
 function Carrinho() {
   const {
@@ -26,15 +27,15 @@ function Carrinho() {
   } = useCarrinho();
 
   const [modalAberto, setModalAberto] = useState(false);
+  const navigate = useNavigate();
 
   const abrirModal = () => setModalAberto(true);
   const fecharModal = () => setModalAberto(false);
 
-  const handleFinalizarCompra = (dados: { endereco: string; formaPagamento: string }) => {
-    console.log('Dados da compra:', dados);
-    // Aqui você pode disparar o processo de checkout / salvar pedido, etc
+  const handleFinalizarCompra = () => {
     alert('Compra finalizada com sucesso!');
     fecharModal();
+    navigate('/pedidos'); // redireciona para a página de pedidos
   };
 
   return (

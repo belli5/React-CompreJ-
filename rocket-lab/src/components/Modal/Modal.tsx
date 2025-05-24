@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { useCarrinho } from '../../pages/Carrinho/CarrinhoContext';
 import {
   Container,
   ProdutoContainer,
@@ -14,13 +15,13 @@ import {
   Button,
   Select,
   QrCodeContainer,
-  ProdutosContainer, // Este container será usado para os produtos
+  ProdutosContainer,
 } from './Modal.style';
 
 type ProdutoCarrinho = {
   id: number;
   nome: string;
-  preco: string; // "R$ 249,90"
+  preco: string;
   quantidade: number;
   imagem?: string;
 };
@@ -28,40 +29,64 @@ type ProdutoCarrinho = {
 type ModalFinalizarCompraProps = {
   produtos: ProdutoCarrinho[];
   onFechar: () => void;
-  onFinalizar: (dados: {
-    nomeCompleto: string;
-    endereco: string;
-    formaPagamento: string;
-    chavePix?: string;
-    nomeCartao?: string;
-    numeroCartao?: string;
-    validadeCartao?: string;
-    cvvCartao?: string;
-    infoAdicional?: string;
-  }) => void;
+  onFinalizar: () => void;
 };
 
 export function ModalFinalizarCompra({ produtos, onFechar, onFinalizar }: ModalFinalizarCompraProps) {
-  // Estados dos campos comuns
+  const { limparCarrinho } = useCarrinho();
+
   const [nomeCompleto, setNomeCompleto] = useState('');
   const [endereco, setEndereco] = useState('');
   const [formaPagamento, setFormaPagamento] = useState('');
   const [infoAdicional, setInfoAdicional] = useState('');
+  const [chavePix, setChavePix] = useState('meuemail@exemplo.com');
 
-  // Dados cartão
   const [nomeCartao, setNomeCartao] = useState('');
   const [numeroCartao, setNumeroCartao] = useState('');
   const [validadeCartao, setValidadeCartao] = useState('');
   const [cvvCartao, setCvvCartao] = useState('');
 
-  // Chave PIX padrão
-  const [chavePix, setChavePix] = useState('meuemail@exemplo.com');
-
-  // Calcular total do carrinho
   const total = produtos.reduce((acc, item) => {
     const precoNum = Number(item.preco.replace(/[^\d,]/g, '').replace(',', '.'));
     return acc + precoNum * item.quantidade;
   }, 0);
+
+  function salvarPedidoNoLocalStorage() {
+    const pedido = {
+      produtos,
+      nomeCompleto,
+      endereco,
+      formaPagamento,
+      infoAdicional,
+      data: new Date().toLocaleString('pt-BR'),
+      total: total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+    };
+
+    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    pedidos.push(pedido);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!nomeCompleto || !endereco || !formaPagamento) {
+      alert('Preencha nome completo, endereço e forma de pagamento');
+      return;
+    }
+
+    if (formaPagamento === 'cartao' &&
+      (!nomeCartao || !numeroCartao || !validadeCartao || !cvvCartao)
+    ) {
+      alert('Preencha todos os dados do cartão');
+      return;
+    }
+
+    salvarPedidoNoLocalStorage();
+    limparCarrinho(); // 🔥 limpa o carrinho após finalizar
+    alert('Pedido realizado com sucesso!');
+    onFinalizar();
+  }
 
   function renderCamposPagamento() {
     switch (formaPagamento) {
@@ -69,48 +94,20 @@ export function ModalFinalizarCompra({ produtos, onFechar, onFinalizar }: ModalF
         return (
           <>
             <Label>Nome no Cartão</Label>
-            <Input
-              type="text"
-              placeholder="Nome impresso no cartão"
-              value={nomeCartao}
-              onChange={e => setNomeCartao(e.target.value)}
-            />
-
+            <Input value={nomeCartao} onChange={e => setNomeCartao(e.target.value)} placeholder="Nome no cartão" />
             <Label>Número do Cartão</Label>
-            <Input
-              type="text"
-              placeholder="XXXX XXXX XXXX XXXX"
-              value={numeroCartao}
-              onChange={e => setNumeroCartao(e.target.value)}
-            />
-
+            <Input value={numeroCartao} onChange={e => setNumeroCartao(e.target.value)} placeholder="XXXX XXXX XXXX XXXX" />
             <Label>Validade</Label>
-            <Input
-              type="text"
-              placeholder="MM/AA"
-              value={validadeCartao}
-              onChange={e => setValidadeCartao(e.target.value)}
-            />
-
+            <Input value={validadeCartao} onChange={e => setValidadeCartao(e.target.value)} placeholder="MM/AA" />
             <Label>CVV</Label>
-            <Input
-              type="password"
-              placeholder="CVV"
-              value={cvvCartao}
-              onChange={e => setCvvCartao(e.target.value)}
-            />
+            <Input value={cvvCartao} onChange={e => setCvvCartao(e.target.value)} placeholder="CVV" type="password" />
           </>
         );
       case 'pix':
         return (
           <>
             <Label>Chave Pix</Label>
-            <Input
-              type="text"
-              value={chavePix}
-              onChange={e => setChavePix(e.target.value)}
-              placeholder="Digite sua chave Pix"
-            />
+            <Input value={chavePix} onChange={e => setChavePix(e.target.value)} placeholder="Digite sua chave Pix" />
             <Label>QR Code para Pagamento</Label>
             <QrCodeContainer>
               <QRCodeCanvas value={chavePix} size={180} />
@@ -124,41 +121,11 @@ export function ModalFinalizarCompra({ produtos, onFechar, onFinalizar }: ModalF
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    // Validações básicas
-    if (!nomeCompleto || !endereco || !formaPagamento) {
-      alert('Preencha nome completo, endereço e forma de pagamento');
-      return;
-    }
-
-    if (formaPagamento === 'cartao') {
-      if (!nomeCartao || !numeroCartao || !validadeCartao || !cvvCartao) {
-        alert('Preencha todos os dados do cartão');
-        return;
-      }
-    }
-
-    onFinalizar({
-      nomeCompleto,
-      endereco,
-      formaPagamento,
-      chavePix: formaPagamento === 'pix' ? chavePix : undefined,
-      nomeCartao: formaPagamento === 'cartao' ? nomeCartao : undefined,
-      numeroCartao: formaPagamento === 'cartao' ? numeroCartao : undefined,
-      validadeCartao: formaPagamento === 'cartao' ? validadeCartao : undefined,
-      cvvCartao: formaPagamento === 'cartao' ? cvvCartao : undefined,
-      infoAdicional,
-    });
-  }
-
   return (
     <Container onClick={onFechar}>
       <FormularioContainer onClick={e => e.stopPropagation()}>
         <Titulo>Finalizar Compra</Titulo>
 
-        {/* Container de produtos com rolagem horizontal */}
         <ProdutosContainer>
           {produtos.map(prod => (
             <ProdutoContainer key={prod.id}>
@@ -172,52 +139,30 @@ export function ModalFinalizarCompra({ produtos, onFechar, onFinalizar }: ModalF
           ))}
         </ProdutosContainer>
 
-        <strong>Total: R$ {total.toFixed(2).replace('.', ',')}</strong>
+        <strong>Total: {total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
 
-        {/* Formulário */}
         <Form onSubmit={handleSubmit}>
           <Label>Nome Completo</Label>
-          <Input
-            type="text"
-            placeholder="Digite seu nome completo"
-            value={nomeCompleto}
-            onChange={e => setNomeCompleto(e.target.value)}
-          />
+          <Input value={nomeCompleto} onChange={e => setNomeCompleto(e.target.value)} />
 
           <Label>Endereço</Label>
-          <Input
-            type="text"
-            placeholder="Rua, Número, Bairro, Cidade"
-            value={endereco}
-            onChange={e => setEndereco(e.target.value)}
-          />
+          <Input value={endereco} onChange={e => setEndereco(e.target.value)} />
 
           <Label>Forma de Pagamento</Label>
-          <Select
-            value={formaPagamento}
-            onChange={e => setFormaPagamento(e.target.value)}
-          >
+          <Select value={formaPagamento} onChange={e => setFormaPagamento(e.target.value)}>
             <option value="">Selecione</option>
             <option value="pix">Pix</option>
-            <option value="cartao">Cartão de Crédito/Débito</option>
+            <option value="cartao">Cartão</option>
             <option value="boleto">Boleto</option>
           </Select>
 
           {renderCamposPagamento()}
 
           <Label>Informações Adicionais</Label>
-          <Textarea
-            placeholder="Ex.: Portão, andar, referência..."
-            value={infoAdicional}
-            onChange={e => setInfoAdicional(e.target.value)}
-          />
+          <Textarea value={infoAdicional} onChange={e => setInfoAdicional(e.target.value)} />
 
           <Button type="submit">Finalizar Pedido</Button>
-          <Button
-            type="button"
-            style={{ marginLeft: 10, backgroundColor: '#ccc', color: '#333' }}
-            onClick={onFechar}
-          >
+          <Button type="button" style={{ marginLeft: 10, backgroundColor: '#ccc', color: '#333' }} onClick={onFechar}>
             Cancelar
           </Button>
         </Form>

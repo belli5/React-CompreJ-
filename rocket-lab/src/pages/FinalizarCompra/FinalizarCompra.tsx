@@ -29,8 +29,16 @@ function FinalizarCompra() {
   const [chavePix, setChavePix] = useState('meuemail@exemplo.com');
   const [quantidade, setQuantidade] = useState(1);
 
-  const precoNumerico = parseFloat(produto?.preco.replace('R$', '').replace(',', '.')) || 0;
-  const total = (precoNumerico * quantidade).toFixed(2);
+  const precoNumerico = parseFloat(
+    produto?.preco.replace('R$', '').replace(/\./g, '').replace(',', '.')
+  ) || 0;
+
+  const total = precoNumerico * quantidade;
+
+  const totalFormatado = total.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
 
   useEffect(() => {
     if (!produto) {
@@ -45,6 +53,33 @@ function FinalizarCompra() {
   const aumentar = () => setQuantidade(quantidade + 1);
   const diminuir = () => {
     if (quantidade > 1) setQuantidade(quantidade - 1);
+  };
+
+  function salvarPedidoNoLocalStorage() {
+    const pedido = {
+      produto,
+      quantidade,
+      formaPagamento,
+      chavePix: formaPagamento === 'pix' ? chavePix : undefined,
+      data: new Date().toLocaleString('pt-BR'),
+      total: totalFormatado,
+    };
+
+    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    pedidos.push(pedido);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+  }
+
+  const handleFinalizar = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formaPagamento) {
+      alert('Escolha uma forma de pagamento');
+      return;
+    }
+
+    salvarPedidoNoLocalStorage();
+    navigate('/pedidos');
   };
 
   const renderCamposPagamento = () => {
@@ -83,9 +118,7 @@ function FinalizarCompra() {
           </>
         );
       case 'boleto':
-        return (
-          <p>O boleto será gerado após finalizar a compra.</p>
-        );
+        return <p>O boleto será gerado após finalizar a compra.</p>;
       default:
         return null;
     }
@@ -107,7 +140,7 @@ function FinalizarCompra() {
             <QuantidadeButton onClick={aumentar}>+</QuantidadeButton>
           </QuantidadeContainer>
 
-          <p><strong>Total: R$ {total}</strong></p>
+          <p><strong>Total: {totalFormatado}</strong></p>
         </ProdutoInfo>
       </ProdutoContainer>
 
@@ -127,7 +160,7 @@ function FinalizarCompra() {
           >
             <option value="">Selecione</option>
             <option value="pix">Pix</option>
-            <option value="cartao">Cartão de Crédito/Débito</option>
+            <option value="cartao">Cartão</option>
             <option value="boleto">Boleto</option>
           </Select>
 
@@ -136,7 +169,9 @@ function FinalizarCompra() {
           <Label>Informações Adicionais</Label>
           <Textarea placeholder="Ex.: Portão, andar, referência..." />
 
-          <Button type="submit">Finalizar Pedido</Button>
+          <Button type="submit" onClick={handleFinalizar}>
+            Finalizar Pedido
+          </Button>
         </Form>
       </FormularioContainer>
     </Container>

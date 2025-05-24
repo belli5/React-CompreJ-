@@ -1,4 +1,3 @@
-// src/components/ProductCard/ProductCard.tsx
 import {
   Card,
   Img,
@@ -30,7 +29,7 @@ function ProductCard({ produto }: ProductCardProps) {
       <Title>{produto.nome}</Title>
       <Description>{produto.descricao}</Description>
       <Price>{produto.preco}</Price>
-      <Button onClick={() => adicionarItem(produto)}>
+      <Button onClick={() => adicionarItem({ ...produto, quantidade: 1 })}>
         Adicionar ao Carrinho
       </Button>
     </Card>

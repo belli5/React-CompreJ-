@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCarrinho } from '../../pages/Carrinho/CarrinhoContext';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import {
   HeaderContainer,
   Container,
@@ -12,6 +12,7 @@ import {
   Contador,
   SearchContainer,
   SearchInput,
+  PerfilIcon,
 } from './Header.styles';
 
 function Header() {
@@ -20,7 +21,6 @@ function Header() {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-   
   };
 
   return (
@@ -29,6 +29,7 @@ function Header() {
         <Logo>
           <img src="/Imagens/75c11c6c-7691-4454-bb3f-3ecac5bafa22.png" alt="Logo CompreJá" />
         </Logo>
+
         <SearchContainer>
           <SearchInput
             type="text"
@@ -37,13 +38,14 @@ function Header() {
             onChange={handleSearchChange}
           />
         </SearchContainer>
+
         <nav>
           <Menu>
             <MenuItem>
               <Link to="/">Home</Link>
             </MenuItem>
             <MenuItem>
-              <Link to="/sobre">Sobre</Link>
+              <Link to="/pedidos">Meus Pedidos</Link>
             </MenuItem>
             <MenuItem>
               <Link to="/contato">Contato</Link>
@@ -52,8 +54,15 @@ function Header() {
               <Link to="/carrinho">
                 <CarrinhoIcon>
                   <FaShoppingCart />
-                    {itens.length > 0 && <Contador>{itens.length}</Contador>}
+                  {itens.length > 0 && <Contador>{itens.length}</Contador>}
                 </CarrinhoIcon>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/perfil">
+                <PerfilIcon>
+                  <FaUserCircle />
+                </PerfilIcon>
               </Link>
             </MenuItem>
           </Menu>
