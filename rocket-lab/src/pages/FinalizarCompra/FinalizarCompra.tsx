@@ -15,6 +15,8 @@ import {
   Button,
   Select,
   QrCodeContainer,
+  QuantidadeContainer,
+  QuantidadeButton,
 } from './FinalizarCompra.styles';
 
 function FinalizarCompra() {
@@ -25,6 +27,10 @@ function FinalizarCompra() {
 
   const [formaPagamento, setFormaPagamento] = useState('');
   const [chavePix, setChavePix] = useState('meuemail@exemplo.com');
+  const [quantidade, setQuantidade] = useState(1);
+
+  const precoNumerico = parseFloat(produto?.preco.replace('R$', '').replace(',', '.')) || 0;
+  const total = (precoNumerico * quantidade).toFixed(2);
 
   useEffect(() => {
     if (!produto) {
@@ -35,6 +41,11 @@ function FinalizarCompra() {
   if (!produto) {
     return null;
   }
+
+  const aumentar = () => setQuantidade(quantidade + 1);
+  const diminuir = () => {
+    if (quantidade > 1) setQuantidade(quantidade - 1);
+  };
 
   const renderCamposPagamento = () => {
     switch (formaPagamento) {
@@ -73,9 +84,7 @@ function FinalizarCompra() {
         );
       case 'boleto':
         return (
-          <>
-            <p>O boleto será gerado após finalizar a compra.</p>
-          </>
+          <p>O boleto será gerado após finalizar a compra.</p>
         );
       default:
         return null;
@@ -90,7 +99,15 @@ function FinalizarCompra() {
         <ProdutoInfo>
           <h3>{produto.nome}</h3>
           <p>{produto.descricao}</p>
-          <strong>{produto.preco}</strong>
+          <strong>Preço Unitário: {produto.preco}</strong>
+
+          <QuantidadeContainer>
+            <QuantidadeButton onClick={diminuir}>-</QuantidadeButton>
+            <span>{quantidade}</span>
+            <QuantidadeButton onClick={aumentar}>+</QuantidadeButton>
+          </QuantidadeContainer>
+
+          <p><strong>Total: R$ {total}</strong></p>
         </ProdutoInfo>
       </ProdutoContainer>
 

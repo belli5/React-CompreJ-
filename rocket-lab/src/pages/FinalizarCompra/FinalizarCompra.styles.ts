@@ -24,7 +24,7 @@ export const ProdutoContainer = styled.div`
 
 export const ProdutoImagem = styled.img`
   width: 100%;
-  max-width: 400px;
+  max-width: 250px; // 🔥 diminuído para melhor visualização
   height: auto;
   margin: 0 auto 20px;
   display: block;
@@ -37,13 +37,18 @@ export const ProdutoInfo = styled.div`
   }
 
   p {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     color: #555;
   }
 
   strong {
     color: #0057D9;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  span {
+    font-weight: 600;
+    font-size: 1.1rem;
   }
 `;
 
@@ -113,4 +118,27 @@ export const QrCodeContainer = styled.div`
   background-color: white;
   border-radius: 8px;
   width: fit-content;
+`;
+
+export const QuantidadeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center; // 🔥 Centraliza o contador
+  gap: 16px;
+  margin: 16px 0;
+`;
+
+export const QuantidadeButton = styled.button`
+  background-color: #0057D9;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0041a8;
+  }
 `;

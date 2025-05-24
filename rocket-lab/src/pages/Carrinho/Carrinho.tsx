@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useCarrinho } from './CarrinhoContext';
 import {
   CarrinhoContainer,
@@ -15,6 +15,8 @@ import {
   FinalizarCompraButton,
 } from './Carrinho.styles';
 
+import { ModalFinalizarCompra } from '../../components/Modal/Modal'; // ajuste o caminho conforme sua estrutura
+
 function Carrinho() {
   const {
     itens,
@@ -22,10 +24,17 @@ function Carrinho() {
     aumentarQuantidade,
     diminuirQuantidade,
   } = useCarrinho();
-  const navigate = useNavigate();
 
-  const finalizarCompraGeral = () => {
-    navigate('/finalizar', { state: { produtos: itens } });
+  const [modalAberto, setModalAberto] = useState(false);
+
+  const abrirModal = () => setModalAberto(true);
+  const fecharModal = () => setModalAberto(false);
+
+  const handleFinalizarCompra = (dados: { endereco: string; formaPagamento: string }) => {
+    console.log('Dados da compra:', dados);
+    // Aqui você pode disparar o processo de checkout / salvar pedido, etc
+    alert('Compra finalizada com sucesso!');
+    fecharModal();
   };
 
   return (
@@ -45,9 +54,6 @@ function Carrinho() {
               <Preco>{item.preco}</Preco>
 
               <Buttons>
-                <Button onClick={() => navigate('/finalizar', { state: { produto: item } })}>
-                  Comprar
-                </Button>
                 <Button variant="remover" onClick={() => removerItem(item.id)}>
                   Remover
                 </Button>
@@ -65,10 +71,18 @@ function Carrinho() {
 
       {itens.length > 0 && (
         <FinalizarCompraContainer>
-          <FinalizarCompraButton onClick={finalizarCompraGeral}>
+          <FinalizarCompraButton onClick={abrirModal}>
             Finalizar Compra
           </FinalizarCompraButton>
         </FinalizarCompraContainer>
+      )}
+
+      {modalAberto && (
+        <ModalFinalizarCompra
+          produtos={itens}
+          onFechar={fecharModal}
+          onFinalizar={handleFinalizarCompra}
+        />
       )}
     </CarrinhoContainer>
   );
