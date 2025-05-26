@@ -1,6 +1,8 @@
 **Como Rodar**
 
 pnpm install 
+
+
 pnpm run dev
 
 🛒 **CompreJá**
@@ -11,17 +13,33 @@ O CompreJá é uma loja virtual simulada, criada com foco em oferecer uma experi
 
 O site conta com:
 ✅ Página inicial com produtos organizados por categorias.
+
+
 ✅ Carrinho de compras dinâmico, com controle de quantidade e remoção de itens.
+
+
 ✅ Modal de finalização de compra com diferentes formas de pagamento (Pix, Cartão e Boleto).
+
+
 ✅ Histórico de pedidos salvo no navegador usando Local Storage, para acompanhar suas compras realizadas.
+
+
 ✅ Layout responsivo, agradável e fácil de usar.
 
 🔧 Tecnologias e Ferramentas Utilizadas
+
+
 ⚛️ React — Biblioteca para construção da interface.
+
+
 
 💙 TypeScript — Superset do JavaScript, trazendo tipagem estática e maior robustez.
 
+
+
 🎨 Styled-Components — Para criação dos estilos CSS de forma modular e dinâmica.
+
+
 
 🔗 React Router DOM — Navegação entre páginas (Home, Carrinho, Finalização e Pedidos).
 
@@ -30,24 +48,38 @@ O site conta com:
 🎨 React Icons — Ícones modernos e bonitos na interface.
 
 🗺️ Funcionalidades
+
+
 🏠 Home
+
 Visualize produtos divididos por categorias como Tecnologia, Beleza e Casa e Cozinha, com botões para adicionar ao carrinho ou comprar diretamente.
 
 🛒 Carrinho de Compras
+
 Gerencie os produtos adicionados:
+
 ➕ Aumente ou ➖ diminua a quantidade.
+
 🗑️ Remova itens.
+
 💰 Veja o total atualizado em tempo real.
 
 💳 Finalizar Compra
+
 Um modal interativo permite que você:
+
 🔸 Escolha o método de pagamento (Pix com QR Code, Cartão ou Boleto).
+
 🔸 Preencha seus dados de entrega.
+
 🔸 Salve o pedido no histórico.
 
 📑 Histórico de Pedidos
+
 Consulte todos os pedidos já realizados, organizados por data.
+
 ➕ Clique para visualizar os detalhes dos produtos comprados.
+
 **Home**
 
 ![image](https://github.com/user-attachments/assets/4ba8e756-5896-440e-bdb1-f047105e280e)
