@@ -59,11 +59,10 @@ export const CarrinhoIcon = styled.div`
 `;
 
 export const PerfilIcon = styled.div`
-  font-size: 2.0rem;
+  font-size: 3.5rem;
   cursor: pointer;
   color: white;
   transition: color 0.3s;
-
   &:hover {
     color: #b3d1ff;
   }
@@ -95,4 +94,21 @@ export const SearchInput = styled.input`
   border: none;
   font-size: 16px;
   outline: none;
+`;
+
+export const IconsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 20px;
+
+  svg {
+    color: white;
+    cursor: pointer;
+    font-size: 1.8rem;
+  }
+
+  svg:hover {
+    color: #b3d1ff;
+  }
 `;
